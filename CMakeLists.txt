@@ -8,9 +8,12 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+# Find FFTW
 find_path(FFTW_INCLUDE_DIR fftw3.h)
-find_library(FFTW_LIBRARIES NAMES fftw3)
+find_library(FFTW_LIBS NAMES fftw3)
+include_directories(${FFTW_INCLUDE_DIR})
 
+# Setup unit testing
 enable_testing()
 
 # Download and unpack googletest at configure time
@@ -48,5 +51,4 @@ endif()
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(examples)
-
 
