@@ -1,8 +1,13 @@
 language: cpp
+
 compiler:
      - clang
-packages:
-     - libfftw3-dev
+
+addons:
+    apt:
+        sources: ubuntu-toolchain-r-test
+        packages: [libfftw3-dev]
+
 script:
      - mkdir -p build
      - cd build
