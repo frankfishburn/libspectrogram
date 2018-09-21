@@ -1,4 +1,4 @@
-add_executable(stft_tests stft_common.cpp stft_constructor.cpp stft_window.cpp stft_power.cpp)
+add_executable(stft_tests stft_common.cpp stft_constructor.cpp stft_window.cpp stft_power.cpp stft_phase.cpp)
 target_include_directories(stft_tests PUBLIC "${PROJECT_SOURCE_DIR}/include")
 target_include_directories(stft_tests PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(stft_tests gtest_main)

@@ -326,7 +326,32 @@ void STFT::get_power(double* out_ptr) {
 }
 
 void STFT::get_phase(double* out_ptr) {
+   
+    unsigned long row_in, row_out;
+    double real, imag;
     
+    for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
+        
+        row_in = window_index * window_length_;
+        row_out = window_index * num_frequencies_;
+    
+        // Special case for freq=0 because FFTW doesn't give a complex value since its always zero
+        out_ptr[row_out] = 0;
+        
+        // Normal frequencies P=(i^2 + j^2) * 2*scale
+        for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
+            
+            real = fourier_spectra_[row_in + frequency_index];
+            imag = fourier_spectra_[row_in + (window_length_-frequency_index)];
+            
+            out_ptr[row_out + frequency_index] = atan2( imag , real );
+            
+        }
+        
+        // Special case for Nyquist
+        out_ptr[row_out + num_frequencies_ - 1] = 0;
+        
+    }
     
 }
 
@@ -336,5 +361,14 @@ std::vector<double> STFT::power() {
     pwr.resize(num_windows_ * num_frequencies_);
     get_power(pwr.data());
     return pwr;
+    
+}
+
+std::vector<double> STFT::phase() {
+    
+    std::vector<double> phs;
+    phs.resize(num_windows_ * num_frequencies_);
+    get_phase(phs.data());
+    return phs;
     
 }

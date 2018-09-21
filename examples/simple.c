@@ -48,11 +48,22 @@ int main(int argc, char** argv) {
     spectrogram_destroy( mySTFT );
     
     // Print the result
+    printf("Power:");
     for (int f=freq_len-1; f>-1; f--) {
         printf("\n%6f Hz:  ",freq[f]);
         for (int t=0; t<time_len; t++) {
         
             printf("%6f   ",power[t*freq_len+f]);
+        }
+        printf("\n");
+    }
+    
+    printf("\nPhase:");
+    for (int f=freq_len-1; f>-1; f--) {
+        printf("\n%6f Hz:  ",freq[f]);
+        for (int t=0; t<time_len; t++) {
+        
+            printf("%+6f   ",phase[t*freq_len+f]);
         }
         printf("\n");
     }

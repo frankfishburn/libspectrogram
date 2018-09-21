@@ -1,6 +1,5 @@
 /*
- * This file tests the windowing functions (Hamming, Blackman, etc) for even and
- * odd size windows.
+ * This file tests the power calculation
  */
 
 #include "stft_common.h"
