@@ -1,8 +1,8 @@
 language: cpp
 compiler:
      - clang
-install:
-     - fftw
+packages:
+     - libfftw3-dev
 script:
      - mkdir -p build
      - cd build
