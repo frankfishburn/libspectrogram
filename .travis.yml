@@ -6,9 +6,11 @@ compiler:
 addons:
     apt:
         sources: ubuntu-toolchain-r-test
-        packages: [libfftw3-dev]
+        packages: [gcc-7 g++-7 libfftw3-dev]
 
 script:
+     - export CC=gcc-7
+     - export CXX=g++-7
      - mkdir -p build
      - cd build
      - cmake .. 
