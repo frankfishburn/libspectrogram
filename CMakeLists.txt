@@ -8,6 +8,9 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+find_path(FFTW_INCLUDE_DIR fftw3.h)
+find_library(FFTW_LIBRARIES NAMES fftw3)
+
 enable_testing()
 
 # Download and unpack googletest at configure time
