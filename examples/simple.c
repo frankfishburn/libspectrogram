@@ -25,21 +25,37 @@ int main(int argc, char** argv) {
     // Create the program
     SpectrogramTransform *mySTFT = spectrogram_create( &props, &config );
     
-    // Perform the STFT
-    SpectrogramData result = spectrogram_execute( mySTFT , signal );
+    // Get output parameters
+    unsigned long time_len = spectrogram_get_timelen( mySTFT );
+    unsigned long freq_len = spectrogram_get_freqlen( mySTFT );
     
-    // Print the result
-    for (int f=result.freq_length-1; f>-1; f--) {
-        printf("\n%6f Hz:  ",result.freq[f]);
-        for (int t=0; t<result.time_length; t++) {
-        
-            printf("%6f   ",result.power[t*result.freq_length+f]);
-        }
-        printf("\n");
-    }
+    // Allocate outputs
+    double *time = malloc( sizeof(double) * time_len );
+    double *freq = malloc( sizeof(double) * freq_len );
+    double *power = malloc( sizeof(double) * time_len * freq_len );
+    double *phase = malloc( sizeof(double) * time_len * freq_len );
+    
+    // Perform the STFT
+    spectrogram_execute( mySTFT , signal );
+    
+    // Get the outputs
+    spectrogram_get_time( mySTFT , time );
+    spectrogram_get_freq( mySTFT , freq );
+    spectrogram_get_power( mySTFT , power );
+    spectrogram_get_phase( mySTFT , phase );
     
     // Destroy the transform
     spectrogram_destroy( mySTFT );
+    
+    // Print the result
+    for (int f=freq_len-1; f>-1; f--) {
+        printf("\n%6f Hz:  ",freq[f]);
+        for (int t=0; t<time_len; t++) {
+        
+            printf("%6f   ",power[t*freq_len+f]);
+        }
+        printf("\n");
+    }
     
     return (EXIT_SUCCESS);
 }

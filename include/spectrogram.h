@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+    
 typedef enum {
     TRUNCATE,
     HEAD,
@@ -44,18 +44,6 @@ typedef struct {
 
 } StftConfig;
 
-// Define the output data structure
-typedef struct {
-    
-    unsigned long time_length;
-    unsigned long freq_length;
-    double *time;
-    double *freq;
-    double *power;
-    double *phase;
-
-} SpectrogramData;
-
 // Define the C interface
 struct SpectrogramTransform;
 typedef struct SpectrogramTransform SpectrogramTransform;
@@ -64,14 +52,20 @@ typedef struct SpectrogramTransform SpectrogramTransform;
 SpectrogramTransform* spectrogram_create(InputProps*, StftConfig*);
 
 // Computation
-SpectrogramData spectrogram_execute(SpectrogramTransform* program, double* input);
+void spectrogram_execute(SpectrogramTransform* program, double* input);
+
+// Get data-agnostic outputs
+unsigned long spectrogram_get_timelen(SpectrogramTransform* program);
+unsigned long spectrogram_get_freqlen(SpectrogramTransform* program);
+
+// Get data-specific outputs
+void spectrogram_get_time(SpectrogramTransform* program, double* time);
+void spectrogram_get_freq(SpectrogramTransform* program, double* freq);
+void spectrogram_get_power(SpectrogramTransform* program, double* power);
+void spectrogram_get_phase(SpectrogramTransform* program, double* phase);
 
 // Destructor
 void spectrogram_destroy(SpectrogramTransform*);
-
-// Free
-void spectrogram_free(SpectrogramData*);
-
 
 #ifdef __cplusplus
 }

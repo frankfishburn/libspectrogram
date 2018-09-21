@@ -254,7 +254,6 @@ void STFT::compute(double *signal) {
 
     // Check input
     if (num_windows_ < 1) {
-        status_ = 1;
         return;
     }
 
@@ -276,14 +275,24 @@ void STFT::compute(double *signal) {
 
 }
 
-std::vector<double> STFT::power() {
-
-    std::vector<double> pwr;
-    pwr.resize(num_windows_ * num_frequencies_);
+void STFT::get_time(double* out_ptr) {
     
+    for (unsigned long window_index=0; window_index<num_windows_; window_index++)
+        out_ptr[window_index] = time_[window_index];
+
+}
+
+void STFT::get_freq(double* out_ptr) {
+    
+    for (unsigned long frequency_index=0; frequency_index<num_frequencies_; frequency_index++)        
+        out_ptr[frequency_index] = frequency_[frequency_index];
+    
+}
+
+void STFT::get_power(double* out_ptr) {
+
     unsigned long row_in, row_out;
     double real, imag;
-    
     
     for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
         
@@ -292,7 +301,7 @@ std::vector<double> STFT::power() {
     
         // Special case for freq=0 because FFTW doesn't give a complex value since its always zero
         real = fourier_spectra_[row_in];
-        pwr[row_out] = real*real * scale_factor_;
+        out_ptr[row_out] = real*real * scale_factor_;
         
         // Normal frequencies P=(i^2 + j^2) * 2*scale
         for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
@@ -300,19 +309,32 @@ std::vector<double> STFT::power() {
             real = fourier_spectra_[row_in + frequency_index];
             imag = fourier_spectra_[row_in + (window_length_-frequency_index)];
             
-            pwr[row_out + frequency_index] = (real*real + imag*imag) * 2*scale_factor_;
+            out_ptr[row_out + frequency_index] = (real*real + imag*imag) * 2*scale_factor_;
             
         }
         
         // Special case for Nyquist
         real = fourier_spectra_[row_in + num_frequencies_ - 1];
         if (num_frequencies_ % 2 == 0) {
-            pwr[row_out + num_frequencies_ - 1] = real*real * scale_factor_;
+            out_ptr[row_out + num_frequencies_ - 1] = real*real * scale_factor_;
         } else {
-            pwr[row_out + num_frequencies_ - 1] = real*real * 2*scale_factor_;
+            out_ptr[row_out + num_frequencies_ - 1] = real*real * 2*scale_factor_;
         }
         
     }
     
+}
+
+void STFT::get_phase(double* out_ptr) {
+    
+    
+}
+
+std::vector<double> STFT::power() {
+    
+    std::vector<double> pwr;
+    pwr.resize(num_windows_ * num_frequencies_);
+    get_power(pwr.data());
     return pwr;
+    
 }

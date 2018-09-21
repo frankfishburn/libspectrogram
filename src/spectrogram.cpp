@@ -10,20 +10,55 @@ SpectrogramTransform* spectrogram_create(InputProps *props, StftConfig *config) 
 }
 
 // Execute
-SpectrogramData spectrogram_execute(SpectrogramTransform* transform, double* input) {
+void spectrogram_execute(SpectrogramTransform* transform, double* input) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
     mystft->compute(input);
     
-    SpectrogramData data;
-    data.time_length = mystft->num_windows();
-    data.freq_length = mystft->num_frequencies();
-    data.time = mystft->time().data();
-    data.freq = mystft->frequency().data();
-    data.power = mystft->power().data();
-    data.phase = NULL;
+}
+
+
+// Get output parameters
+size_t spectrogram_get_timelen(SpectrogramTransform* transform) {
     
-    return data;
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    return mystft->num_windows();
+    
+}
+
+size_t spectrogram_get_freqlen(SpectrogramTransform* transform) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    return mystft->num_frequencies();
+    
+}
+
+
+// Get outputs
+void spectrogram_get_time(SpectrogramTransform* transform, double* time) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    mystft->get_time(time);
+    
+}
+
+void spectrogram_get_freq(SpectrogramTransform* transform, double* freq) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    mystft->get_freq(freq);
+    
+}
+void spectrogram_get_power(SpectrogramTransform* transform, double* power) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    mystft->get_power(power);
+    
+}
+
+void spectrogram_get_phase(SpectrogramTransform* transform, double* phase) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    mystft->get_phase(phase);
     
 }
 
@@ -32,30 +67,5 @@ void spectrogram_destroy(SpectrogramTransform* transform) {
 
     STFT *mystft = reinterpret_cast<STFT*>(transform);
     delete mystft;
-    
-}
-
-// Free the output data
-void spectrogram_free(SpectrogramData* data) {
-    
-    if (data->time != NULL) {
-        free(data->time);
-        data->time = NULL;
-    }
-    
-    if (data->freq!=NULL) {
-        free(data->freq);
-        data->freq = NULL;
-    }
-    
-    if (data->power!=NULL) {
-        free(data->power);
-        data->power = NULL;
-    }
-    
-    if (data->phase!=NULL) {
-        free(data->phase);
-        data->phase = NULL;
-    }
     
 }

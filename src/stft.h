@@ -31,11 +31,16 @@ public:
     void compute(double*);
 
     // Outputs
-    int status() const { return status_; };
     std::vector<double> time() const { return time_; };
     std::vector<double> frequency() const { return frequency_; };
     std::vector<double> power();
-    std::vector<double> phase() const;
+    std::vector<double> phase();
+
+    void get_time(double *out_ptr);
+    void get_freq(double *out_ptr);
+    void get_power(double *out_ptr);
+    void get_phase(double *out_ptr);
+    
     
 private:
 
