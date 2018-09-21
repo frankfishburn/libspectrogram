@@ -1,0 +1,11 @@
+language: cpp
+compiler:
+     - clang
+install:
+     - fftw
+script:
+     - mkdir -p build
+     - cd build
+     - cmake .. 
+     - make
+     - make test
