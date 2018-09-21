@@ -7,7 +7,7 @@ double MaxError(std::vector<double> v1, std::vector<double> v2){
     
     double error = 0;
     for (int i=0; i<(int)v1.size(); i++)
-        error = std::max( error , abs(v1[i]-v2[i]) );
+        error = std::max( error , std::abs(v1[i]-v2[i]) );
     
     return error;
 }
