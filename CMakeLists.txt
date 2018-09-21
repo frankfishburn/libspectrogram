@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.11)
+cmake_minimum_required (VERSION 3.9.2)
 project(spectrogram VERSION 0.01 DESCRIPTION "Library for computing time-frequency representations of time series data.")
 
 if(NOT CMAKE_BUILD_TYPE)
