@@ -14,6 +14,6 @@ TEST_F(Fixture_18x6x3_10Hz, Phase) {
                                   0,    2.3869,   -1.0981,    0,
                                   0,   -0.7533,   -2.9982,    0 };
     
-    EXPECT_LT(MaxError(mystft->phase(),phase), .0001);    
+    EXPECT_LT(MaxError(mystft->get_phase_vector<double>(),phase), .0001);    
 
 }

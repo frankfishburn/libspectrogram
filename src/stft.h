@@ -17,6 +17,7 @@ public:
     // Input accessors
     unsigned long num_samples() const { return num_samples_; };
     double sample_rate() const { return sample_rate_; };
+    int data_size() const { return data_size_; };
     PaddingMode padding_mode() const {return padding_mode_; };
     WindowType window_type() const {return window_type_; };
     unsigned long window_length() const {return window_length_; };
@@ -28,18 +29,18 @@ public:
     std::vector<double> window_coefs() const{ return window_coefs_; };
         
     // Computation
-    void compute(double*);
+    void compute(void*);
 
     // Outputs
-    std::vector<double> time() const { return time_; };
-    std::vector<double> frequency() const { return frequency_; };
-    std::vector<double> power();
-    std::vector<double> phase();
+    template <typename T> std::vector<T> get_time_vector() const { return time_; }
+    template <typename T> std::vector<T> get_frequency_vector() const { return frequency_; }
+    template <typename T> std::vector<T> get_power_vector();
+    template <typename T> std::vector<T> get_phase_vector();
 
-    void get_time(double *out_ptr);
-    void get_freq(double *out_ptr);
-    void get_power(double *out_ptr);
-    void get_phase(double *out_ptr);
+    template <typename T> void get_time(void *out_ptr);
+    template <typename T> void get_freq(void *out_ptr);
+    template <typename T> void get_power(void *out_ptr);
+    template <typename T> void get_phase(void *out_ptr);
     
     
 private:
@@ -57,14 +58,12 @@ private:
     void init_time();
     void init_frequency();
 
-    
-    int status_ = 0;
-
-    // User-supplied input/transform parameters
-    //StftConfig config_;
-    //InputProps props_;
+    // User-supplied input parameters
     double sample_rate_;
     unsigned long num_samples_;
+    int data_size_;
+    
+    // User-supplied transform parameters
     PaddingMode padding_mode_;
     WindowType window_type_;
     unsigned long window_length_;
@@ -75,14 +74,17 @@ private:
     unsigned long num_frequencies_;
     std::vector<double> window_coefs_;
     double scale_factor_;
+    bool isFloat() const {return (data_size_ == sizeof(float));}
+    bool isDouble() const {return (data_size_ == sizeof(double));}
     
     // Outputs
     std::vector<double> time_;
     std::vector<double> frequency_;
 
     // FFT-related
-    fftw_plan fft_plan_;
-    double* fourier_spectra_;
+    fftw_plan fftw_plan_;
+    fftwf_plan fftwf_plan_;
+    void* fourier_spectra_;
 
 };
 

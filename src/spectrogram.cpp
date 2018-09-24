@@ -10,7 +10,7 @@ SpectrogramTransform* spectrogram_create(InputProps *props, StftConfig *config) 
 }
 
 // Execute
-void spectrogram_execute(SpectrogramTransform* transform, double* input) {
+void spectrogram_execute(SpectrogramTransform* transform, void* input) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
     mystft->compute(input);
@@ -35,30 +35,53 @@ size_t spectrogram_get_freqlen(SpectrogramTransform* transform) {
 
 
 // Get outputs
-void spectrogram_get_time(SpectrogramTransform* transform, double* time) {
+void spectrogram_get_time(SpectrogramTransform* transform, void* time) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
-    mystft->get_time(time);
     
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_time<float>(time);
+    
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_time<double>(time);
+    }
 }
 
-void spectrogram_get_freq(SpectrogramTransform* transform, double* freq) {
+void spectrogram_get_freq(SpectrogramTransform* transform, void* freq) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
-    mystft->get_freq(freq);
+    
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_freq<float>(freq);
+        
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_freq<double>(freq);
+    }
+    
     
 }
-void spectrogram_get_power(SpectrogramTransform* transform, double* power) {
+void spectrogram_get_power(SpectrogramTransform* transform, void* power) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
-    mystft->get_power(power);
     
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_power<float>(power);
+        
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_power<double>(power);
+    }
 }
 
-void spectrogram_get_phase(SpectrogramTransform* transform, double* phase) {
+void spectrogram_get_phase(SpectrogramTransform* transform, void* phase) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
-    mystft->get_phase(phase);
+    
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_phase<float>(phase);
+        
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_phase<double>(phase);
+    }
     
 }
 

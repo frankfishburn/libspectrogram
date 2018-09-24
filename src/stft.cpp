@@ -9,6 +9,7 @@ STFT::STFT(const InputProps& new_props, const StftConfig& new_config) {
     // Copy inputs to internal
     sample_rate_ = new_props.sample_rate;
     num_samples_ = new_props.num_samples;
+    data_size_ = new_props.data_size;
     padding_mode_ = new_config.padding_mode;
     window_type_ = new_config.window_type;
     window_length_ = new_config.window_length;
@@ -33,9 +34,17 @@ STFT::STFT(const InputProps& new_props, const StftConfig& new_config) {
 
 STFT::~STFT() {
 
-    fftw_free(fourier_spectra_);
-    fftw_destroy_plan(fft_plan_);
-    
+    if (isFloat()) {
+        
+        fftwf_free(fourier_spectra_);
+        fftwf_destroy_plan(fftwf_plan_);
+        
+    } else if (isDouble()) {
+        
+        fftw_free(fourier_spectra_);
+        fftw_destroy_plan(fftw_plan_);
+        
+    }
 }
 
 void STFT::validate() {
@@ -53,6 +62,10 @@ void STFT::validate() {
     if (window_overlap_ >= window_length_) {
         fprintf(stderr,"WARNING: Window overlap must be less than window length. Setting to 1 less.");
         window_overlap_ = window_length_ - 1;
+    }
+    
+    if (!isFloat() & !isDouble()) {
+        fprintf(stderr,"WARNING: data_size is not float or double.");
     }
 
 }
@@ -99,20 +112,39 @@ void STFT::calc_num_frequencies() {
 
 // Allocate the internal buffer to hold segmented data / Fourier spectra, and FFTW plan
 void STFT::init_fft() {
-        
-    // Allocate
-    fourier_spectra_ = (double*) fftw_malloc(sizeof (double) * num_windows_ * window_length_);
 
-    // Create FFT plan
+    // Set FFT parameters
     const int wid[] = {(int) window_length_};
     unsigned int flags = FFTW_MEASURE | FFTW_PRESERVE_INPUT;
     const fftw_r2r_kind fft_kind = FFTW_R2HC;
-    fft_plan_ = fftw_plan_many_r2r(1, wid, (int) num_windows_,\
-                                    fourier_spectra_, NULL, 1, (int) window_length_,\
-                                    fourier_spectra_, NULL, 1, (int) window_length_, &fft_kind, flags);
 
-    // Zero-out buffer
-    memset(fourier_spectra_, 0, sizeof (double) * num_windows_ * window_length_);
+    if (isFloat()) {
+        
+        // Allocate
+        fourier_spectra_ = fftwf_malloc(sizeof(float) * num_windows_ * window_length_);
+
+        // Create FFT plan
+        fftwf_plan_ = fftwf_plan_many_r2r(1, wid, (int) num_windows_,\
+                                        (float*) fourier_spectra_, NULL, 1, (int) window_length_,\
+                                        (float*) fourier_spectra_, NULL, 1, (int) window_length_, &fft_kind, flags);
+
+        // Zero-out buffer
+        memset(fourier_spectra_, 0, sizeof(float) * num_windows_ * window_length_);
+        
+    } else if (isDouble()) {
+        
+        // Allocate
+        fourier_spectra_ = fftw_malloc(sizeof(double) * num_windows_ * window_length_);
+
+        // Create FFT plan
+        fftw_plan_ = fftw_plan_many_r2r(1, wid, (int) num_windows_,\
+                                        (double*) fourier_spectra_, NULL, 1, (int) window_length_,\
+                                        (double*) fourier_spectra_, NULL, 1, (int) window_length_, &fft_kind, flags);
+
+        // Zero-out buffer
+        memset(fourier_spectra_, 0, sizeof(double) * num_windows_ * window_length_);
+        
+    }
     
 }
 
@@ -250,7 +282,7 @@ void STFT::init_frequency() {
 }
 
 // Perform segmentation and windowing of input data, then calculate FFTs
-void STFT::compute(double *signal) {
+void STFT::compute(void *vsignal) {
 
     // Check input
     if (num_windows_ < 1) {
@@ -260,39 +292,75 @@ void STFT::compute(double *signal) {
     unsigned long input_offset = 0;
     unsigned long window_increment = window_length_ - window_overlap_;
 
-    // Apply segmentation and windowing
-    for (unsigned long window = 0; window < num_windows_; window++) {
+    if (isFloat()) {
+        
+        float *signal = (float*) vsignal;
+        float *fourier_spectra = (float*) fourier_spectra_;
+        
+        // Apply segmentation and windowing
+        for (unsigned long window = 0; window < num_windows_; window++) {
 
-        for (unsigned long sample = 0; sample < window_length_; sample++) {
+            for (unsigned long sample = 0; sample < window_length_; sample++) {
 
-            fourier_spectra_[window * window_length_ + sample] = window_coefs_[sample] * signal[window * window_increment + sample + input_offset];
+                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[window * window_increment + sample + input_offset];
 
+            }
         }
+        
+        // Compute Fourier spectra in-place
+        fftwf_execute(fftwf_plan_);
+        
+    } else if (isDouble()) {
+        
+        double *signal = (double*) vsignal;
+        double *fourier_spectra = (double*) fourier_spectra_;
+        
+        // Apply segmentation and windowing
+        for (unsigned long window = 0; window < num_windows_; window++) {
+
+            for (unsigned long sample = 0; sample < window_length_; sample++) {
+
+                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[window * window_increment + sample + input_offset];
+
+            }
+        }
+        
+        // Compute Fourier spectra in-place
+        fftw_execute(fftw_plan_);
+        
     }
-
-    // Compute Fourier spectra in-place
-    fftw_execute(fft_plan_);
-
+    
 }
 
-void STFT::get_time(double* out_ptr) {
+template <typename T>
+void STFT::get_time(void* vout_ptr) {
     
+    T* out_ptr = (T*) vout_ptr;
     for (unsigned long window_index=0; window_index<num_windows_; window_index++)
         out_ptr[window_index] = time_[window_index];
 
 }
+template void STFT::get_time<float>(void*);
+template void STFT::get_time<double>(void*);
 
-void STFT::get_freq(double* out_ptr) {
+template <typename T>
+void STFT::get_freq(void* vout_ptr) {
     
+    T* out_ptr = (T*) vout_ptr;
     for (unsigned long frequency_index=0; frequency_index<num_frequencies_; frequency_index++)        
         out_ptr[frequency_index] = frequency_[frequency_index];
     
 }
+template void STFT::get_freq<float>(void*);
+template void STFT::get_freq<double>(void*);
 
-void STFT::get_power(double* out_ptr) {
+template <typename T>
+void STFT::get_power(void* vout_ptr) {
 
     unsigned long row_in, row_out;
-    double real, imag;
+    T real, imag;
+    T* out_ptr = (T*) vout_ptr;
+    T* fourier_spectra = (T*) fourier_spectra_;
     
     for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
         
@@ -300,21 +368,21 @@ void STFT::get_power(double* out_ptr) {
         row_out = window_index * num_frequencies_;
     
         // Special case for freq=0 because FFTW doesn't give a complex value since its always zero
-        real = fourier_spectra_[row_in];
+        real = fourier_spectra[row_in];
         out_ptr[row_out] = real*real * scale_factor_;
         
         // Normal frequencies P=(i^2 + j^2) * 2*scale
         for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
             
-            real = fourier_spectra_[row_in + frequency_index];
-            imag = fourier_spectra_[row_in + (window_length_-frequency_index)];
+            real = fourier_spectra[row_in + frequency_index];
+            imag = fourier_spectra[row_in + (window_length_-frequency_index)];
             
             out_ptr[row_out + frequency_index] = (real*real + imag*imag) * 2*scale_factor_;
             
         }
         
         // Special case for Nyquist
-        real = fourier_spectra_[row_in + num_frequencies_ - 1];
+        real = fourier_spectra[row_in + num_frequencies_ - 1];
         if (num_frequencies_ % 2 == 0) {
             out_ptr[row_out + num_frequencies_ - 1] = real*real * scale_factor_;
         } else {
@@ -324,11 +392,16 @@ void STFT::get_power(double* out_ptr) {
     }
     
 }
+template void STFT::get_power<float>(void*);
+template void STFT::get_power<double>(void*);
 
-void STFT::get_phase(double* out_ptr) {
+template <typename T>
+void STFT::get_phase(void* vout_ptr) {
    
     unsigned long row_in, row_out;
-    double real, imag;
+    T real, imag;
+    T* out_ptr = (T*) vout_ptr;
+    T* fourier_spectra = (T*) fourier_spectra_;
     
     for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
         
@@ -341,8 +414,8 @@ void STFT::get_phase(double* out_ptr) {
         // Normal frequencies P=(i^2 + j^2) * 2*scale
         for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
             
-            real = fourier_spectra_[row_in + frequency_index];
-            imag = fourier_spectra_[row_in + (window_length_-frequency_index)];
+            real = fourier_spectra[row_in + frequency_index];
+            imag = fourier_spectra[row_in + (window_length_-frequency_index)];
             
             out_ptr[row_out + frequency_index] = atan2( imag , real );
             
@@ -354,21 +427,29 @@ void STFT::get_phase(double* out_ptr) {
     }
     
 }
+template void STFT::get_phase<float>(void*);
+template void STFT::get_phase<double>(void*);
 
-std::vector<double> STFT::power() {
+template <typename T>
+std::vector<T> STFT::get_power_vector() {
     
-    std::vector<double> pwr;
+    std::vector<T> pwr;
     pwr.resize(num_windows_ * num_frequencies_);
-    get_power(pwr.data());
+    get_power<T>((void*) pwr.data());
     return pwr;
     
 }
+template std::vector<float> STFT::get_power_vector();
+template std::vector<double> STFT::get_power_vector();
 
-std::vector<double> STFT::phase() {
+template <typename T>
+std::vector<T> STFT::get_phase_vector() {
     
-    std::vector<double> phs;
+    std::vector<T> phs;
     phs.resize(num_windows_ * num_frequencies_);
-    get_phase(phs.data());
+    get_phase<T>((void*) phs.data());
     return phs;
     
 }
+template std::vector<float> STFT::get_phase_vector();
+template std::vector<double> STFT::get_phase_vector();

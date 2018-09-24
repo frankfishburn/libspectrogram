@@ -14,8 +14,9 @@ double MaxError(std::vector<double> v1, std::vector<double> v2){
 
 void Fixture_4x2x1_1Hz::SetUp(){
     
-    props.sample_rate = 1;   
+    props.sample_rate = 1;
     props.num_samples = 4;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_type = RECTANGULAR;
@@ -24,7 +25,7 @@ void Fixture_4x2x1_1Hz::SetUp(){
 
     mystft = new STFT(props, config);
     
-};
+}
 
 void Fixture_4x2x1_1Hz::TearDown() {
 
@@ -36,6 +37,7 @@ void Fixture_7x3x2_1Hz::SetUp(){
     
     props.sample_rate = 1;   
     props.num_samples = 7;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_type = RECTANGULAR;
@@ -44,7 +46,7 @@ void Fixture_7x3x2_1Hz::SetUp(){
 
     mystft = new STFT(props, config);
     
-};
+}
 
 void Fixture_7x3x2_1Hz::TearDown() {
 
@@ -56,6 +58,7 @@ void Fixture_10x4x1_piHz::SetUp(){
     
     props.sample_rate = M_PI;   
     props.num_samples = 10;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_type = RECTANGULAR;
@@ -64,7 +67,7 @@ void Fixture_10x4x1_piHz::SetUp(){
 
     mystft = new STFT(props, config);
     
-};
+}
 
 void Fixture_10x4x1_piHz::TearDown() {
 
@@ -76,6 +79,7 @@ void Fixture_18x6x3_10Hz::SetUp(){
     
     props.sample_rate = 10;
     props.num_samples = 18;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_type = HAMMING;
@@ -91,7 +95,7 @@ void Fixture_18x6x3_10Hz::SetUp(){
     
     mystft->compute(signal.data());
     
-};
+}
 
 void Fixture_18x6x3_10Hz::TearDown(){
     
@@ -103,20 +107,22 @@ void Fixture_16::SetUp(){
     
     props.sample_rate = 1;
     props.num_samples = 16;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_length = 16;
     config.window_overlap = 1;
 
-};
+}
 
 void Fixture_17::SetUp(){
     
     props.sample_rate = 1;
     props.num_samples = 17;
+    props.data_size = sizeof(double);
 
     config.padding_mode = TRUNCATE;
     config.window_length = 17;
     config.window_overlap = 1;
 
-};
+}

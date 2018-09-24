@@ -14,6 +14,7 @@ int main(int argc, char** argv) {
     InputProps props;
     props.num_samples = 18;
     props.sample_rate = 10;
+    props.data_size = sizeof(double);
     
     // Specify the configuration for the transform
     StftConfig config;
@@ -36,13 +37,13 @@ int main(int argc, char** argv) {
     double *phase = malloc( sizeof(double) * time_len * freq_len );
     
     // Perform the STFT
-    spectrogram_execute( mySTFT , signal );
+    spectrogram_execute( mySTFT , (void*) signal );
     
     // Get the outputs
-    spectrogram_get_time( mySTFT , time );
-    spectrogram_get_freq( mySTFT , freq );
-    spectrogram_get_power( mySTFT , power );
-    spectrogram_get_phase( mySTFT , phase );
+    spectrogram_get_time( mySTFT , (void*) time );
+    spectrogram_get_freq( mySTFT , (void*) freq );
+    spectrogram_get_power( mySTFT , (void*) power );
+    spectrogram_get_phase( mySTFT , (void*) phase );
     
     // Destroy the transform
     spectrogram_destroy( mySTFT );

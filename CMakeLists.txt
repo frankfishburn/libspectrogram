@@ -6,12 +6,13 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -Werror -pedantic")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # Find FFTW
 find_path(FFTW_INCLUDE_DIR fftw3.h)
 find_library(FFTW_LIBS NAMES fftw3)
+find_library(FFTWF_LIBS NAMES fftw3f)
 include_directories(${FFTW_INCLUDE_DIR})
 
 # Setup unit testing

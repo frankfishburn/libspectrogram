@@ -14,14 +14,14 @@ TEST_F(Fixture_4x2x1_1Hz, DerivedParameters) {
 TEST_F(Fixture_4x2x1_1Hz, Time) {
     
     std::vector<double> time = {0.5, 1.5, 2.5};
-    EXPECT_EQ(mystft->time(), time);
+    EXPECT_EQ(mystft->get_time_vector<double>(), time);
     
 }
 
 TEST_F(Fixture_4x2x1_1Hz, Frequency) {
     
     std::vector<double> frequency = {0, 0.5};
-    EXPECT_EQ(mystft->frequency(), frequency);
+    EXPECT_EQ(mystft->get_frequency_vector<double>(), frequency);
     
 }
 
@@ -39,14 +39,14 @@ TEST_F(Fixture_7x3x2_1Hz, DerivedParameters) {
 TEST_F(Fixture_7x3x2_1Hz, Time) {
     
     std::vector<double> time = {1.0, 2.0, 3.0, 4.0, 5.0};
-    EXPECT_EQ(mystft->time(), time);
+    EXPECT_EQ(mystft->get_time_vector<double>(), time);
     
 }
 
 TEST_F(Fixture_7x3x2_1Hz, Frequency) {
     
     std::vector<double> frequency = {0, 1.0/3.0};
-    EXPECT_EQ(mystft->frequency(), frequency);
+    EXPECT_EQ(mystft->get_frequency_vector<double>(), frequency);
     
 }
 
@@ -64,14 +64,14 @@ TEST_F(Fixture_10x4x1_piHz, DerivedParameters) {
 TEST_F(Fixture_10x4x1_piHz, Time) {
     
     std::vector<double> time = {0.47746, 1.4324, 2.3873};
-    EXPECT_LT(MaxError(mystft->time(), time), .0001);
+    EXPECT_LT(MaxError(mystft->get_time_vector<double>(), time), .0001);
     
 }
 
 TEST_F(Fixture_10x4x1_piHz, Frequency) {
     
     std::vector<double> frequency = {0, M_PI/4.0, M_PI/2.0};
-    EXPECT_EQ(mystft->frequency(), frequency);
+    EXPECT_EQ(mystft->get_frequency_vector<double>(), frequency);
     
 }
 

@@ -31,6 +31,7 @@ typedef struct {
     
     double sample_rate;
     unsigned long num_samples;
+    int data_size;
     
 } InputProps;
 
@@ -52,17 +53,17 @@ typedef struct SpectrogramTransform SpectrogramTransform;
 SpectrogramTransform* spectrogram_create(InputProps*, StftConfig*);
 
 // Computation
-void spectrogram_execute(SpectrogramTransform* program, double* input);
+void spectrogram_execute(SpectrogramTransform* program, void* input);
 
 // Get data-agnostic outputs
 unsigned long spectrogram_get_timelen(SpectrogramTransform* program);
 unsigned long spectrogram_get_freqlen(SpectrogramTransform* program);
 
 // Get data-specific outputs
-void spectrogram_get_time(SpectrogramTransform* program, double* time);
-void spectrogram_get_freq(SpectrogramTransform* program, double* freq);
-void spectrogram_get_power(SpectrogramTransform* program, double* power);
-void spectrogram_get_phase(SpectrogramTransform* program, double* phase);
+void spectrogram_get_time(SpectrogramTransform* program, void* time);
+void spectrogram_get_freq(SpectrogramTransform* program, void* freq);
+void spectrogram_get_power(SpectrogramTransform* program, void* power);
+void spectrogram_get_phase(SpectrogramTransform* program, void* phase);
 
 // Destructor
 void spectrogram_destroy(SpectrogramTransform*);

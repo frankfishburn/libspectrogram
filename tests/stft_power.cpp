@@ -14,6 +14,6 @@ TEST_F(Fixture_18x6x3_10Hz, Power) {
                                  0.141962, 0.131140, 0.140239, 0.009721, 
                                  0.027941, 0.199963, 0.210372, 0.013773};
     
-    EXPECT_LT(MaxError(mystft->power(),power), .0001);    
+    EXPECT_LT(MaxError(mystft->get_power_vector<double>(),power), .0001);    
 
 }
