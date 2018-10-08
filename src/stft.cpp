@@ -75,22 +75,15 @@ void STFT::calc_num_windows() {
     const double samples = (double) num_samples_;
     const double length = (double) window_length_;
     const double increment = (double) window_length_ - window_overlap_;
-
+    const double num_windows = (samples - length) / increment + 1.0;
+    
     switch (padding_mode_) {
         case TRUNCATE:
-            num_windows_ = (unsigned long) (floor((samples - length) / increment) + 1);
+            num_windows_ = (unsigned long) floor(num_windows);
             break;
-
-        case TAIL:
-            num_windows_ = (unsigned long) (ceil((samples - length) / increment) + 1);
-            break;
-
-        case HEADTAIL:
-            num_windows_ = (unsigned long) (ceil((samples - length) / increment) + 1);
-            break;
-
-        case HALFWINDOW:
-            num_windows_ = (unsigned long) (ceil((samples - ceil(length / 2)) / increment) + 1);
+            
+        case PAD:
+            num_windows_ = (unsigned long) ceil(num_windows);
             break;
 
         default:

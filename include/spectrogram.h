@@ -17,10 +17,7 @@ extern "C" {
 **/   
 typedef enum {
     TRUNCATE,   /**< Round down to the nearest whole segment */
-    HEAD,       /**< Zero-pad the beginning of the signal to the next whole segment */
-    TAIL,       /**< Zero-pad the ending of the signal to the next whole segment */
-    HEADTAIL,   /**< Evenly distribute padding between beginning and end (+1 to end if odd) */
-    HALFWINDOW  /**< Zero-pad one half-window length to beginning and end, then truncate */
+    PAD         /**< Zero-pad the ending of the signal to the next whole segment */
 } PaddingMode;
 
 /**
