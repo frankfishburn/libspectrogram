@@ -41,6 +41,8 @@ public:
     template <typename T> void get_freq(void *out_ptr);
     template <typename T> void get_power(void *out_ptr);
     template <typename T> void get_phase(void *out_ptr);
+    template <typename T> void get_power_periodogram(void *out_ptr);
+    template <typename T> void get_phase_periodogram(void *out_ptr);
     
     
 private:

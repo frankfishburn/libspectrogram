@@ -60,6 +60,7 @@ void spectrogram_get_freq(SpectrogramTransform* transform, void* freq) {
     
     
 }
+
 void spectrogram_get_power(SpectrogramTransform* transform, void* power) {
     
     STFT *mystft = reinterpret_cast<STFT*>(transform);
@@ -81,6 +82,31 @@ void spectrogram_get_phase(SpectrogramTransform* transform, void* phase) {
         
     } else if (mystft->data_size()==sizeof(double)) {
         mystft->get_phase<double>(phase);
+    }
+    
+}
+
+void spectrogram_get_power_periodogram(SpectrogramTransform* transform, void* power) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_power_periodogram<float>(power);
+        
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_power_periodogram<double>(power);
+    }
+}
+
+void spectrogram_get_phase_periodogram(SpectrogramTransform* transform, void* phase) {
+    
+    STFT *mystft = reinterpret_cast<STFT*>(transform);
+    
+    if (mystft->data_size()==sizeof(float)) {
+        mystft->get_phase_periodogram<float>(phase);
+        
+    } else if (mystft->data_size()==sizeof(double)) {
+        mystft->get_phase_periodogram<double>(phase);
     }
     
 }

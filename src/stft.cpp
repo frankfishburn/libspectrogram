@@ -453,3 +453,74 @@ std::vector<T> STFT::get_phase_vector() {
 }
 template std::vector<float> STFT::get_phase_vector();
 template std::vector<double> STFT::get_phase_vector();
+
+template <typename T>
+void STFT::get_power_periodogram(void* vout_ptr) {
+
+    unsigned long row_in;
+    T real, imag;
+    T* out_ptr = (T*) vout_ptr;
+    T* fourier_spectra = (T*) fourier_spectra_;
+    memset(out_ptr, 0, num_frequencies_);
+    
+    for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
+        
+        row_in = window_index * window_length_;
+    
+        // Special case for freq=0 because FFTW doesn't give a complex value since its always zero
+        real = fourier_spectra[row_in];
+        out_ptr[0] += real*real * scale_factor_;
+        
+        // Normal frequencies P=(i^2 + j^2) * 2*scale
+        for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
+            
+            real = fourier_spectra[row_in + frequency_index];
+            imag = fourier_spectra[row_in + (window_length_-frequency_index)];
+            
+            out_ptr[frequency_index] += (real*real + imag*imag) * 2*scale_factor_;
+            
+        }
+        
+        // Special case for Nyquist
+        real = fourier_spectra[row_in + num_frequencies_ - 1];
+        if (num_frequencies_ % 2 == 0) {
+            out_ptr[num_frequencies_ - 1] += real*real * scale_factor_;
+        } else {
+            out_ptr[num_frequencies_ - 1] += real*real * 2*scale_factor_;
+        }
+        
+    }
+    
+}
+template void STFT::get_power_periodogram<float>(void*);
+template void STFT::get_power_periodogram<double>(void*);
+
+
+template <typename T>
+void STFT::get_phase_periodogram(void* vout_ptr) {
+   
+    unsigned long row_in;
+    T real, imag;
+    T* out_ptr = (T*) vout_ptr;
+    T* fourier_spectra = (T*) fourier_spectra_;
+    memset(out_ptr, 0, num_frequencies_);
+    
+    for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
+        
+        row_in = window_index * window_length_;
+
+        // Normal frequencies P=(i^2 + j^2) * 2*scale
+        for (unsigned long frequency_index=1; frequency_index<num_frequencies_-1; frequency_index++) {
+            
+            real = fourier_spectra[row_in + frequency_index];
+            imag = fourier_spectra[row_in + (window_length_-frequency_index)];
+            
+            out_ptr[frequency_index] = atan2( imag , real );
+            
+        }
+        
+    }
+    
+}
+template void STFT::get_phase_periodogram<float>(void*);
+template void STFT::get_phase_periodogram<double>(void*);

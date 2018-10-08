@@ -124,6 +124,20 @@ void spectrogram_get_power(SpectrogramTransform* program, void* power);
 void spectrogram_get_phase(SpectrogramTransform* program, void* phase);
 
 /**
+ * @brief Get the STFT power periodogram
+ * @param[in] SpectrogramTransform* The opaque pointer to the transform object
+ * @param[out] void* Array of spectral power at each frequency
+**/
+void spectrogram_get_power_periodogram(SpectrogramTransform* program, void* power);
+
+/**
+ * @brief Get the STFT phase periodogram
+ * @param[in] SpectrogramTransform* The opaque pointer to the transform object
+ * @param[out] void* Array of phase angle at each frequency
+**/
+void spectrogram_get_phase_periodogram(SpectrogramTransform* program, void* phase);
+
+/**
  * @brief The STFT destructor
  * @param[in] SpectrogramTransform* The opaque pointer to the transform object
 **/
