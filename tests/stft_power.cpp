@@ -17,3 +17,16 @@ TEST_F(Fixture_18x6x3_10Hz, Power) {
     EXPECT_LT(MaxError(mystft->get_power_vector<double>(),power), .0001);    
 
 }
+
+
+TEST_F(Fixture_18x6x3_10Hz_interleaved, Power) {
+
+    std::vector<double> power = {0.022942, 0.031642, 0.117803, 0.009019, 
+                                 0.171276, 0.322919, 0.114042, 0.000697, 
+                                 0.152259, 0.294051, 0.128774, 0.000883, 
+                                 0.141962, 0.131140, 0.140239, 0.009721, 
+                                 0.027941, 0.199963, 0.210372, 0.013773};
+    
+    EXPECT_LT(MaxError(mystft->get_power_vector<double>(),power), .0001);    
+
+}

@@ -10,6 +10,7 @@ STFT::STFT(const InputProps& new_props, const StftConfig& new_config) {
     sample_rate_ = new_props.sample_rate;
     num_samples_ = new_props.num_samples;
     data_size_ = new_props.data_size;
+    stride_ = new_props.stride;
     padding_mode_ = new_config.padding_mode;
     window_type_ = new_config.window_type;
     window_length_ = new_config.window_length;
@@ -66,6 +67,10 @@ void STFT::validate() {
     
     if (!isFloat() & !isDouble()) {
         fprintf(stderr,"WARNING: data_size is not float or double.");
+    }
+    
+    if (stride_ < 1) {
+        fprintf(stderr,"WARNING: Stride cannot be less than 1. Setting to 1.");
     }
 
 }
@@ -282,9 +287,9 @@ void STFT::compute(void *vsignal) {
         return;
     }
 
-    unsigned long input_offset = 0;
     unsigned long window_increment = window_length_ - window_overlap_;
-
+    unsigned long input_index;
+    
     if (isFloat()) {
         
         float *signal = (float*) vsignal;
@@ -295,7 +300,8 @@ void STFT::compute(void *vsignal) {
 
             for (unsigned long sample = 0; sample < window_length_; sample++) {
 
-                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[window * window_increment + sample + input_offset];
+                input_index = window * window_increment + sample;
+                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[stride_ * input_index];
 
             }
         }
@@ -313,7 +319,8 @@ void STFT::compute(void *vsignal) {
 
             for (unsigned long sample = 0; sample < window_length_; sample++) {
 
-                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[window * window_increment + sample + input_offset];
+                input_index = window * window_increment + sample;
+                fourier_spectra[window * window_length_ + sample] = window_coefs_[sample] * signal[stride_ * input_index];
 
             }
         }

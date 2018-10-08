@@ -62,6 +62,7 @@ private:
     double sample_rate_;
     unsigned long num_samples_;
     int data_size_;
+    int stride_;
     
     // User-supplied transform parameters
     PaddingMode padding_mode_;

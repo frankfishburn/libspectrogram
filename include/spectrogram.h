@@ -44,6 +44,7 @@ typedef struct {
     double sample_rate;        /**< The acquisition sample rate of the signal */
     unsigned long num_samples; /**< The number of samples in the signal */
     int data_size;             /**< The size of each sample in bytes */
+    int stride;                /**< Indicates the number of values to skip between each consecutive sample (1 for contiguous data) */
     
 } InputProps;
 

@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
     props.num_samples = 18;
     props.sample_rate = 10;
     props.data_size = sizeof(double);
+    props.stride = 1;
     
     // Specify the configuration for the transform
     StftConfig config;

@@ -63,6 +63,19 @@ protected:
     virtual void TearDown();
 };
 
+
+class Fixture_18x6x3_10Hz_interleaved : public ::testing::Test {
+        
+protected:
+    
+    STFT* mystft;
+    InputProps props;
+    StftConfig config;
+
+    virtual void SetUp();
+    virtual void TearDown();
+};
+
 class Fixture_16 : public ::testing::Test {
         
 protected:
