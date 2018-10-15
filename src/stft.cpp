@@ -461,7 +461,7 @@ void STFT::get_power_periodogram(void* vout_ptr) {
     T real, imag;
     T* out_ptr = (T*) vout_ptr;
     T* fourier_spectra = (T*) fourier_spectra_;
-    memset(out_ptr, 0, num_frequencies_);
+    memset(out_ptr, 0, num_frequencies_ * data_size_);
     
     for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
         
@@ -503,7 +503,7 @@ void STFT::get_phase_periodogram(void* vout_ptr) {
     T real, imag;
     T* out_ptr = (T*) vout_ptr;
     T* fourier_spectra = (T*) fourier_spectra_;
-    memset(out_ptr, 0, num_frequencies_);
+    memset(out_ptr, 0, num_frequencies_ * data_size_);
     
     for (unsigned long window_index=0; window_index<num_windows_; window_index++) {
         
