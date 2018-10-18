@@ -6,7 +6,15 @@ compiler:
 addons:
     apt:
         sources: ubuntu-toolchain-r-test
-        packages: [gcc-7 g++-7 libfftw3-dev]
+        packages:
+            - gcc-7
+            - g++-7
+            - libfftw3-dev
+            - doxygen
+            - doxygen-doc
+            - doxygen-latex
+            - doxygen-gui
+            - graphviz
 
 script:
      - mkdir updates
