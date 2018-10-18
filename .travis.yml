@@ -12,7 +12,7 @@ script:
      - mkdir updates
      - wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
      - sh cmake-3.12.0-Linux-x86_64.sh --prefix=updates --exclude-subdir
-     - export PATH=`pwd`/updates:$PATH
+     - export PATH=`pwd`/updates/bin:$PATH
      - export CC=gcc-7
      - export CXX=g++-7
      - mkdir -p build
