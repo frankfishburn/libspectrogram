@@ -14,6 +14,9 @@ find_path(FFTW_INCLUDE_DIR fftw3.h)
 find_library(FFTW_LIBS REQUIRED NAMES fftw3)
 find_library(FFTWF_LIBS REQUIRED NAMES fftw3f)
 include_directories(${FFTW_INCLUDE_DIR})
+message(STATUS "FFTW include directory: ${FFTW_INCLUDE_DIR}")
+message(STATUS "FFTW float library: ${FFTWF_LIBS}")
+message(STATUS "FFTW double library: ${FFTW_LIBS}")
 
 # Setup unit testing
 enable_testing()
