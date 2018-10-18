@@ -14,6 +14,7 @@ set_target_properties(spectrogram_static PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(spectrogram_shared PROPERTIES OUTPUT_NAME spectrogram)
 set_target_properties(spectrogram_static PROPERTIES OUTPUT_NAME spectrogram)
 
-#install(TARGETS spectrogram_shared DESTINATION lib)
-#install(TARGETS spectrogram_static DESTINATION lib)
-#install(FILES ../include/spectrogram.h DESTINATION include)
+# Set install paths
+install(TARGETS spectrogram_shared DESTINATION lib)
+install(TARGETS spectrogram_static DESTINATION lib)
+install(FILES "${PROJECT_SOURCE_DIR}/include/spectrogram.h" DESTINATION include)
