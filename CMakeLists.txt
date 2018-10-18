@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.9.2)
+cmake_minimum_required (VERSION 3.12.0)
 project(spectrogram VERSION 0.01 DESCRIPTION "Library for computing time-frequency representations of time series data.")
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -11,8 +11,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # Find FFTW
 find_path(FFTW_INCLUDE_DIR fftw3.h)
-find_library(FFTW_LIBS NAMES fftw3)
-find_library(FFTWF_LIBS NAMES fftw3f)
+find_library(FFTW_LIBS REQUIRED NAMES fftw3)
+find_library(FFTWF_LIBS REQUIRED NAMES fftw3f)
 include_directories(${FFTW_INCLUDE_DIR})
 
 # Setup unit testing
