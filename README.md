@@ -18,9 +18,11 @@ make
 make test
 ```
 ### Matlab
-```Matlab
-cd('bindings/matlab');
+Specify root directory for the matlab installation (`Matlab_ROOT_DIR`) and optionally the output directory (`MATLAB_INSTALL_PATH`) when you run cmake:
+```bash
+cmake -DMatlab_ROOT_DIR=/opt/matlab/R2018b -DMATLAB_INSTALL_PATH=$HOME/matlab/libspectrogram ..
 make;
+make install;
 ```
 
 ---

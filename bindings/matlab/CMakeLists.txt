@@ -2,7 +2,7 @@ find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
 
 if(Matlab_FOUND)
 
-    set(MATLAB_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/matlab" CACHE FILEPATH "Location to place Matlab bindings")
+    set(MATLAB_INSTALL_PATH "$ENV{HOME}/Documents/MATLAB/libspectrogram" CACHE FILEPATH "Location to place Matlab bindings")
 
     matlab_add_mex(
         NAME spectrogram_mex
