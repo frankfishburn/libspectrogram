@@ -15,5 +15,6 @@ if(Matlab_FOUND)
 
     install(TARGETS spectrogram_mex DESTINATION "${MATLAB_INSTALL_PATH}")
     install(FILES "${PROJECT_SOURCE_DIR}/bindings/matlab/libspectrogram.m" DESTINATION "${MATLAB_INSTALL_PATH}")
+    install(FILES "${PROJECT_SOURCE_DIR}/bindings/matlab/functionSignatures.json" DESTINATION "${MATLAB_INSTALL_PATH}")
 
 endif()

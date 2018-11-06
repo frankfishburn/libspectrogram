@@ -1,0 +1,16 @@
+{
+"_schemaVersion": "1.0.0",
+
+"libspectrogram":
+{
+    "inputs":
+    [
+        {"name":"Signal",  "kind":"required", "type":["numeric","real"], "purpose":"Input signal"},
+        {"name":"SampleRate", "kind":"namevalue", "type":["numeric","scalar"], "purpose":"Sampling rate of the signal"},
+        {"name":"WindowType", "kind":"namevalue", "type":"choices={'RECTANGULAR','TRIANGULAR','BARTLETT','HANN','WELCH','HAMMING','BLACKMAN','NUTTALL','BLACKMAN_NUTTALL','BLACKMAN_HARRIS'}", "purpose":"Windowing function to apply to each STFT segment"},
+        {"name":"WindowLength", "kind":"namevalue", "type":["numeric","scalar"], "purpose":"Length of window (samples)"},
+        {"name":"WindowOverlap", "kind":"namevalue", "type":["numeric","scalar"], "purpose":"Amount of overlap between consecutive windows (samples)"},
+        {"name":"PaddingMode", "kind":"namevalue", "type":"choices={'TRUNCATE','PAD'}", "purpose":"Whether input signal should be zero padded"}
+    ]
+}
+}

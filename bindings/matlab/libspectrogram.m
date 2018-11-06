@@ -1,4 +1,34 @@
-function result = libspectrogram(data,varargin)
+function result = libspectrogram(signal,varargin)
+% Interface for computing spectrograms using libspectrogram
+%
+% Usage: result = libspectrogram( signal, [key-value parameters])
+%
+% Input: 
+%   signal - A 1-dimensional array of single of double type
+%
+% Parameters: 
+%   SampleRate    - The sampling rate of the input signal (Hz)
+%   PaddingMode   - Whether to zero-pad the input signal to nearest window ('TRUNCATE' or 'PAD')
+%   WindowLength  - Length of each window (samples)
+%   WindowOverlap - Length of overlap between consecutive windows (samples)
+%   WindowType    - Windowing function to use. Valid choices: 'RECTANGULAR', 
+%                   'TRIANGULAR', 'BARTLETT', 'HANN', 'WELCH', 'HAMMING', 
+%                   'BLACKMAN', 'NUTTALL', 'BLACKMAN_NUTTALL', 'BLACKMAN_HARRIS
+%
+% Output:
+%   Result - A struct containing the following fields:
+%       time  - [1 x T] vector of times (in seconds)
+%       freq  - [1 x F] vector of frequencies (in Hz)
+%       power - [F x T] matrix of power at each time and frequency
+%       phase - [F x T] matrix of phase at each time and frequency
+%
+% Example:
+%   % Compute spectrogram
+%   result = libspectrogram(rand(10000,1), 'SampleRate',10, 'PaddingMode','PAD', ...
+%                           'WindowLength',100, 'WindowOverlap',50, 'WindowType','HAMMING');
+%   % Draw power
+%   figure; imagesc(result.time, result.freq, result.power);
+
 %% Parse inputs
 valid_windows = {'RECTANGULAR'
                  'TRIANGULAR'
@@ -53,11 +83,11 @@ end
 %% Setup and execute
 config = struct;
 config.sample_rate = p.Results.SampleRate;
-config.window_type = p.Results.WindowType;
-config.padding_mode = p.Results.PaddingMode;
+config.window_type = upper(p.Results.WindowType);
+config.padding_mode = upper(p.Results.PaddingMode);
 config.window_length = p.Results.WindowLength;
 config.window_overlap = p.Results.WindowOverlap;
 
-result = libspectrogram_mex(data,config);
+result = libspectrogram_mex(signal,config);
 
 end
