@@ -4,7 +4,7 @@
 
 #include "stft.h"
 
-STFT::STFT(const InputProps& new_props, const StftConfig& new_config) {
+STFT::STFT(const SpectrogramInput& new_props, const SpectrogramConfig& new_config) {
     
     // Copy inputs to internal
     sample_rate_ = new_props.sample_rate;

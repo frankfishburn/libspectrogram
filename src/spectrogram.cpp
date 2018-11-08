@@ -3,7 +3,7 @@
 #include <stdlib.h> 
 
 // Create
-SpectrogramTransform* spectrogram_create(InputProps *props, StftConfig *config) {
+SpectrogramTransform* spectrogram_create(SpectrogramInput *props, SpectrogramConfig *config) {
 
     return reinterpret_cast<SpectrogramTransform*>( new STFT( *props , *config ) );
     

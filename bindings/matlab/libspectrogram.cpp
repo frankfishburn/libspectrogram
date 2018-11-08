@@ -33,7 +33,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
         
     // Check/prepare input parameters
-    InputProps props;
+    SpectrogramInput props;
     props.num_samples = numel;
     props.stride = 1;
     
@@ -58,7 +58,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     // Check/prepare configuration
     int buflen, status;
     char *buffer;
-    StftConfig config;
+    SpectrogramConfig config;
     
     // Configuration: Padding Mode
     field = mxGetField(prhs[1], 0, "padding_mode");

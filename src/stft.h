@@ -10,7 +10,7 @@ class STFT {
 public:
 
     // Setup
-    STFT(const InputProps& input, const StftConfig& config);
+    STFT(const SpectrogramInput& input, const SpectrogramConfig& config);
     STFT(const STFT& orig);
     virtual ~STFT();
 

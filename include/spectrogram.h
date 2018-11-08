@@ -46,7 +46,7 @@ typedef struct {
     int data_size;             /**< The size of each sample in bytes */
     int stride;                /**< Indicates the number of values to skip between each consecutive sample (1 for contiguous data) */
     
-} InputProps;
+} SpectrogramInput;
 
 /**
  * @brief Specifies the properties of the STFT (padding mode, window function, window length, window overlap)
@@ -58,7 +58,7 @@ typedef struct {
     unsigned long window_length;   /**< The length in samples of each segment */
     unsigned long window_overlap;  /**< The number of samples of overlap between consecutive segments */
 
-} StftConfig;
+} SpectrogramConfig;
 
 /**
  * @brief The opaque pointer for the transform
@@ -68,11 +68,11 @@ typedef struct SpectrogramTransform SpectrogramTransform;
 
 /**
  * @brief The STFT contructor
- * @param[in] InputProps* A pointer to the properties of the input signal
- * @param[in] StftConfig* A pointer to the configuration of the desired STFT
+ * @param[in] SpectrogramInput* A pointer to the properties of the input signal
+ * @param[in] SpectrogramConfig* A pointer to the configuration of the desired STFT
  * @returns The opaque pointer to the transform object
 **/
-SpectrogramTransform* spectrogram_create(InputProps*, StftConfig*);
+SpectrogramTransform* spectrogram_create(SpectrogramInput*, SpectrogramConfig*);
 
 /**
  * @brief Compute the STFT on an input signal

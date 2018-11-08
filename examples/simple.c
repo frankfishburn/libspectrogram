@@ -11,14 +11,14 @@ int main(int argc, char** argv) {
                     0.890903, 1.959291, 0.547216, -0.861376, 0.149294, 1.257508};
     
     // Specify the input signal properties
-    InputProps props;
+    SpectrogramInput props;
     props.num_samples = 18;
     props.sample_rate = 10;
     props.data_size = sizeof(double);
     props.stride = 1;
     
     // Specify the configuration for the transform
-    StftConfig config;
+    SpectrogramConfig config;
     config.padding_mode = TRUNCATE;
     config.window_type = HAMMING;
     config.window_length = 6;
