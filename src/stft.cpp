@@ -131,9 +131,6 @@ void STFT::init_fft() {
         fftwf_plan_ = fftwf_plan_many_r2r(1, wid, (int) num_windows_,\
                                         (float*) fourier_spectra_, NULL, 1, (int) transform_length_,\
                                         (float*) fourier_spectra_, NULL, 1, (int) transform_length_, &fft_kind, flags);
-
-        // Zero-out buffer
-        memset(fourier_spectra_, 0, sizeof(float) * num_windows_ * transform_length_);
         
     } else if (isDouble()) {
         
@@ -144,9 +141,6 @@ void STFT::init_fft() {
         fftw_plan_ = fftw_plan_many_r2r(1, wid, (int) num_windows_,\
                                         (double*) fourier_spectra_, NULL, 1, (int) transform_length_,\
                                         (double*) fourier_spectra_, NULL, 1, (int) transform_length_, &fft_kind, flags);
-
-        // Zero-out buffer
-        memset(fourier_spectra_, 0, sizeof(double) * num_windows_ * transform_length_);
         
     }
     
@@ -301,6 +295,9 @@ void STFT::compute(void *vsignal) {
         float *signal = (float*) vsignal;
         float *fourier_spectra = (float*) fourier_spectra_;
         
+        // Zero-out buffer
+        memset(fourier_spectra_, 0, sizeof(float) * num_windows_ * transform_length_);
+        
         // Apply segmentation and windowing
         for (unsigned long window = 0; window < num_windows_; window++) {
 
@@ -319,6 +316,9 @@ void STFT::compute(void *vsignal) {
         
         double *signal = (double*) vsignal;
         double *fourier_spectra = (double*) fourier_spectra_;
+        
+        // Zero-out buffer
+        memset(fourier_spectra_, 0, sizeof(double) * num_windows_ * transform_length_);
         
         // Apply segmentation and windowing
         for (unsigned long window = 0; window < num_windows_; window++) {
