@@ -123,6 +123,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
         mexErrMsgIdAndTxt("libspectrogram:input:badwindowoverlap","Invalid window overlap");
     }
     config.window_overlap  = (unsigned long) mxGetScalar(field);
+    
+    // Configuration: Window Overlap
+    field = mxGetField(prhs[1], 0, "transform_length");
+    if (!(mxIsDouble(field) & mxIsScalar(field)) ) {
+        mexErrMsgIdAndTxt("libspectrogram:input:badwindowoverlap","Invalid transform length");
+    }
+    config.transform_length  = (unsigned long) mxGetScalar(field);
 
     // Create the program
     SpectrogramTransform *mySTFT = spectrogram_create( &props, &config );

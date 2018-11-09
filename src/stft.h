@@ -71,7 +71,8 @@ private:
     WindowType window_type_;
     unsigned long window_length_;
     unsigned long window_overlap_;
-
+    unsigned long transform_length_;
+    
     // Derived parameters
     unsigned long num_windows_;
     unsigned long num_frequencies_;

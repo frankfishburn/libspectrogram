@@ -56,6 +56,7 @@ addParameter(p,'WindowType',[],iswindow);
 addParameter(p,'PaddingMode',[],ispadding);
 addParameter(p,'WindowLength',[],@isnumeric);
 addParameter(p,'WindowOverlap',[],@isnumeric);
+addParameter(p,'TransformLength',[],@isnumeric);
 
 parse(p,varargin{:});
 
@@ -79,6 +80,9 @@ end
 if isempty(p.Results.WindowOverlap)
     error('Please specify ''WindowOverlap''');
 end
+if isempty(p.Results.TransformLength)
+    error('Please specify ''TransformLength''');
+end
 
 %% Setup and execute
 config = struct;
@@ -87,6 +91,7 @@ config.window_type = upper(p.Results.WindowType);
 config.padding_mode = upper(p.Results.PaddingMode);
 config.window_length = p.Results.WindowLength;
 config.window_overlap = p.Results.WindowOverlap;
+config.transform_length = p.Results.TransformLength;
 
 result = libspectrogram_mex(signal,config);
 

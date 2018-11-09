@@ -23,6 +23,7 @@ void Fixture_4x2x1_1Hz::SetUp(){
     config.window_type = RECTANGULAR;
     config.window_length = 2;
     config.window_overlap = 1;
+    config.transform_length = 2;
 
     mystft = new STFT(props, config);
     
@@ -45,6 +46,7 @@ void Fixture_7x3x2_1Hz::SetUp(){
     config.window_type = RECTANGULAR;
     config.window_length = 3;
     config.window_overlap = 2;
+    config.transform_length = 3;
 
     mystft = new STFT(props, config);
     
@@ -67,6 +69,7 @@ void Fixture_10x4x1_piHz::SetUp(){
     config.window_type = RECTANGULAR;
     config.window_length = 4;
     config.window_overlap = 1;
+    config.transform_length = 4;
 
     mystft = new STFT(props, config);
     
@@ -89,6 +92,7 @@ void Fixture_18x6x3_10Hz::SetUp(){
     config.window_type = HAMMING;
     config.window_length = 6;
     config.window_overlap = 3;
+    config.transform_length = 6;
     
     mystft = new STFT(props, config);
     
@@ -118,6 +122,7 @@ void Fixture_18x6x3_10Hz_interleaved::SetUp(){
     config.window_type = HAMMING;
     config.window_length = 6;
     config.window_overlap = 3;
+    config.transform_length = 6;
     
     mystft = new STFT(props, config);
     
@@ -136,6 +141,37 @@ void Fixture_18x6x3_10Hz_interleaved::TearDown(){
     
 }
 
+
+void Fixture_18x6x3_10Hz_pow2::SetUp(){
+    
+    props.sample_rate = 10;
+    props.num_samples = 18;
+    props.data_size = sizeof(double);
+    props.stride = 1;
+
+    config.padding_mode = TRUNCATE;
+    config.window_type = HAMMING;
+    config.window_length = 6;
+    config.window_overlap = 3;
+    config.transform_length = 16;
+    
+    mystft = new STFT(props, config);
+    
+    // Noisy 2.5 Hz signal
+    std::vector<double> signal = {0.655098, 1.162612, 0.118998, -0.501636, 0.959744, 1.340386, 
+                                  0.585268, -0.776188, 0.751267, 1.255095, 0.505957, -0.300923, 
+                                  0.890903, 1.959291, 0.547216, -0.861376, 0.149294, 1.257508};
+    
+    mystft->compute(signal.data());
+    
+}
+
+void Fixture_18x6x3_10Hz_pow2::TearDown(){
+    
+    delete mystft;
+    
+}
+
 void Fixture_16::SetUp(){
     
     props.sample_rate = 1;
@@ -146,6 +182,7 @@ void Fixture_16::SetUp(){
     config.padding_mode = TRUNCATE;
     config.window_length = 16;
     config.window_overlap = 1;
+    config.transform_length = 16;
 
 }
 
@@ -159,5 +196,6 @@ void Fixture_17::SetUp(){
     config.padding_mode = TRUNCATE;
     config.window_length = 17;
     config.window_overlap = 1;
-
+    config.transform_length = 17;
+    
 }

@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
     config.window_type = HAMMING;
     config.window_length = 6;
     config.window_overlap = 3;
+    config.transform_length = 16;
     
     // Create the program
     SpectrogramTransform *mySTFT = spectrogram_create( &props, &config );

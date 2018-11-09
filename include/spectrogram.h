@@ -57,7 +57,8 @@ typedef struct {
     WindowType window_type;        /**< The windowing function to use on each segment */
     unsigned long window_length;   /**< The length in samples of each segment */
     unsigned long window_overlap;  /**< The number of samples of overlap between consecutive segments */
-
+    unsigned long transform_length;/**< The number of samples to compute the Fourier transforms */
+    
 } SpectrogramConfig;
 
 /**

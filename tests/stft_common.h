@@ -76,6 +76,18 @@ protected:
     virtual void TearDown();
 };
 
+class Fixture_18x6x3_10Hz_pow2 : public ::testing::Test {
+        
+protected:
+    
+    STFT* mystft;
+    SpectrogramInput props;
+    SpectrogramConfig config;
+
+    virtual void SetUp();
+    virtual void TearDown();
+};
+
 class Fixture_16 : public ::testing::Test {
         
 protected:
