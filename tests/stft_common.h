@@ -7,6 +7,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+
 #include "spectrogram.h"
 #include "stft.h"
 

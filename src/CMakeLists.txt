@@ -1,3 +1,5 @@
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 set(BUILD_SHARED ON CACHE BOOL "Build the shared library")
 set(BUILD_STATIC ON CACHE BOOL "Build the static library")
 

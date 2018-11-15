@@ -1,4 +1,5 @@
 #include "stft_common.h"
+#include "stft.cpp"
 
 double MaxError(std::vector<double> v1, std::vector<double> v2){
     
