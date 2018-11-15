@@ -1,6 +1,12 @@
-find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
+set(BUILD_MATLAB OFF CACHE BOOL "Build matlab binding")
 
-if(Matlab_FOUND)
+if(BUILD_MATLAB)
+
+    find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
+
+    if(NOT Matlab_FOUND)
+        message(FATAL_ERROR "MATLAB is needed to build the bindings.")
+    endif()
 
     set(MATLAB_INSTALL_PATH "$ENV{HOME}/Documents/MATLAB/libspectrogram" CACHE FILEPATH "Location to place Matlab bindings")
 

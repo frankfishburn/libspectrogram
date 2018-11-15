@@ -1,8 +1,8 @@
-# add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+set(BUILD_DOCS OFF CACHE BOOL "Build the documentation")
 
-if(BUILD_DOCUMENTATION)
+if(BUILD_DOCS)
+
+    find_package(Doxygen)
 
     if(NOT DOXYGEN_FOUND)
         message(FATAL_ERROR "Doxygen is needed to build the documentation.")
