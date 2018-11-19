@@ -4,12 +4,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/** @file spectrogram.h */
 /** \mainpage libspectrogram
  *
  * \section about_sec About
  *
  * libspectrogram is a C++ library for computing spectrograms and periodograms.
- *
+ * The external API is contained within \ref spectrogram.h "spectrogram.h".
 **/ 
 
 /**
@@ -61,88 +62,89 @@ typedef struct {
     
 } SpectrogramConfig;
 
+struct SpectrogramTransform;
+
 /**
  * @brief The opaque pointer for the transform
 **/
-struct SpectrogramTransform;
 typedef struct SpectrogramTransform SpectrogramTransform;
 
 /**
  * @brief The STFT contructor
- * @param[in] SpectrogramInput* A pointer to the properties of the input signal
- * @param[in] SpectrogramConfig* A pointer to the configuration of the desired STFT
+ * @param[in] props A pointer to the properties of the input signal
+ * @param[in] config A pointer to the configuration of the desired STFT
  * @returns The opaque pointer to the transform object
 **/
-SpectrogramTransform* spectrogram_create(SpectrogramInput*, SpectrogramConfig*);
+SpectrogramTransform* spectrogram_create(SpectrogramInput* props, SpectrogramConfig* config);
 
 /**
  * @brief Compute the STFT on an input signal
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[in] void* The input signal
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[in] input The input signal
 **/
-void spectrogram_execute(SpectrogramTransform* program, void* input);
+void spectrogram_execute(SpectrogramTransform* transform, void* input);
 
 /**
  * @brief Get the number of time points (i.e. number of windows)
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
+ * @param[in] transform The opaque pointer to the transform object
  * @returns the number of time points
 **/
-unsigned long spectrogram_get_timelen(SpectrogramTransform* program);
+unsigned long spectrogram_get_timelen(SpectrogramTransform* transform);
 
 /**
  * @brief Get the number of frequencies
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
+ * @param[in] transform The opaque pointer to the transform object
  * @returns the number of frequencies
 **/
-unsigned long spectrogram_get_freqlen(SpectrogramTransform* program);
+unsigned long spectrogram_get_freqlen(SpectrogramTransform* transform);
 
 /**
  * @brief Get the time vector
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of time points (in seconds) at the center of each segment/window
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[in] time Array of time points (in seconds) at the center of each segment/window
 **/
-void spectrogram_get_time(SpectrogramTransform* program, void* time);
+void spectrogram_get_time(SpectrogramTransform* transform, void* time);
 
 /**
  * @brief Get the frequency vector
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of frequencies (in Hz)
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[out] freq Array of frequencies (in Hz)
 **/
-void spectrogram_get_freq(SpectrogramTransform* program, void* freq);
+void spectrogram_get_freq(SpectrogramTransform* transform, void* freq);
 
 /**
  * @brief Get the STFT power
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of spectral power at each time and frequency
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[out] power Array of spectral power at each time and frequency
 **/
-void spectrogram_get_power(SpectrogramTransform* program, void* power);
+void spectrogram_get_power(SpectrogramTransform* transform, void* power);
 
 /**
  * @brief Get the STFT phase
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of phase angle at each time and frequency
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[out] phase Array of phase angle at each time and frequency
 **/
-void spectrogram_get_phase(SpectrogramTransform* program, void* phase);
+void spectrogram_get_phase(SpectrogramTransform* transform, void* phase);
 
 /**
  * @brief Get the STFT power periodogram
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of spectral power at each frequency
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[out] power Array of spectral power at each frequency
 **/
-void spectrogram_get_power_periodogram(SpectrogramTransform* program, void* power);
+void spectrogram_get_power_periodogram(SpectrogramTransform* transform, void* power);
 
 /**
  * @brief Get the STFT phase periodogram
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
- * @param[out] void* Array of phase angle at each frequency
+ * @param[in] transform The opaque pointer to the transform object
+ * @param[out] phase Array of phase angle at each frequency
 **/
-void spectrogram_get_phase_periodogram(SpectrogramTransform* program, void* phase);
+void spectrogram_get_phase_periodogram(SpectrogramTransform* transform, void* phase);
 
 /**
  * @brief The STFT destructor
- * @param[in] SpectrogramTransform* The opaque pointer to the transform object
+ * @param[in] transform The opaque pointer to the transform object
 **/
-void spectrogram_destroy(SpectrogramTransform*);
+void spectrogram_destroy(SpectrogramTransform* transform);
 
 #ifdef __cplusplus
 }
