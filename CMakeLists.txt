@@ -1,6 +1,10 @@
 cmake_minimum_required (VERSION 3.12.0)
 project(spectrogram VERSION 0.01 DESCRIPTION "Library for computing time-frequency representations of time series data.")
-
+set(VERBOSE OFF CACHE BOOL "Build verbosely")
+if(VERBOSE)
+  set(CMAKE_RULE_MESSAGES OFF)
+  set(CMAKE_VERBOSE_MAKEFILE ON)
+endif()
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()

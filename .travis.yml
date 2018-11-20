@@ -26,6 +26,6 @@ script:
      - mkdir -p build
      - cd build
      - cmake --version
-     - cmake -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+     - cmake -DVERBOSE=ON ..
      - make
      - make test
