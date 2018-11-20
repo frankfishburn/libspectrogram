@@ -162,7 +162,6 @@ void STFT::init_window_coefs() {
             break;
 
         case TRIANGULAR:
-            x = (window_length_ - 1.0) / 2.0;
             for (i = 0; i < ceil(window_length_/2.0); i++) {
                 if (window_length_ % 2 == 0) {
                     window_coefs_[i] = (2*(i+1.0)-1)/window_length_;
