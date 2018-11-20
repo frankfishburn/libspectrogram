@@ -2,6 +2,7 @@ set(BUILD_MATLAB OFF CACHE BOOL "Build matlab binding")
 
 if(BUILD_MATLAB)
 
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.a")
     find_package(Matlab COMPONENTS MX_LIBRARY MEX_COMPILER)
 
     if(NOT Matlab_FOUND)
@@ -18,6 +19,7 @@ if(BUILD_MATLAB)
 
     set_target_properties(spectrogram_mex PROPERTIES COMPILE_FLAGS "-fvisibility=default")
     target_include_directories(spectrogram_mex PUBLIC "${PROJECT_SOURCE_DIR}/include")
+    target_include_directories(spectrogram_mex PUBLIC "${FFTW_INCLUDE_DIR}")
 
     install(TARGETS spectrogram_mex DESTINATION "${MATLAB_INSTALL_PATH}")
     install(FILES "${PROJECT_SOURCE_DIR}/bindings/matlab/libspectrogram.m" DESTINATION "${MATLAB_INSTALL_PATH}")
