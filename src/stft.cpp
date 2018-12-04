@@ -38,11 +38,13 @@ STFT::~STFT() {
 
     if (isFloat()) {
         
+        fftwf_cleanup();
         fftwf_free(fourier_spectra_);
         fftwf_destroy_plan(fftwf_plan_);
         
     } else if (isDouble()) {
         
+        fftw_cleanup();
         fftw_free(fourier_spectra_);
         fftw_destroy_plan(fftw_plan_);
         

@@ -71,6 +71,11 @@ int main(int argc, char** argv) {
         printf("\n");
     }
     
+    free(time);
+    free(freq);
+    free(power);
+    free(phase);
+    
     return (EXIT_SUCCESS);
 }
 
