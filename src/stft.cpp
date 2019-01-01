@@ -393,7 +393,8 @@ void STFT::get_power(void* vout_ptr) {
         if (transform_length_ % 2 == 0) {
             out_ptr[row_out + frequency_index] = real*real * scale_factor_;
         } else {
-            out_ptr[row_out + frequency_index] = real*real * 2*scale_factor_;
+            imag = fourier_spectra[row_in + (transform_length_-frequency_index)];
+            out_ptr[row_out + frequency_index] = (real*real + imag*imag) * 2*scale_factor_;
         }
                 
     }
@@ -429,7 +430,13 @@ void STFT::get_phase(void* vout_ptr) {
         }
         
         // Special case for Nyquist
-        out_ptr[row_out + frequency_index] = 0;
+        if (transform_length_ % 2 == 0) {
+            out_ptr[row_out + frequency_index] = 0;
+        } else {
+            real = fourier_spectra[row_in + frequency_index];
+            imag = fourier_spectra[row_in + (transform_length_-frequency_index)];
+            out_ptr[row_out + frequency_index] = atan2( imag , real );
+        }
         
     }
     
